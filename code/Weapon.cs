@@ -14,7 +14,8 @@ public partial class Weapon : BaseWeapon, IUse
 
 	[Net, Predicted]
 	public TimeSince TimeSinceDeployed { get; set; }
-
+	
+	protected virtual string CrosshairName => "";
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -28,6 +29,17 @@ public partial class Weapon : BaseWeapon, IUse
 		};
 
 		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
+	}
+
+	public override void CreateHudElements()
+	{
+		base.CreateHudElements();
+
+		if( Local.Hud == null ) return;
+
+		CrosshairPanel = new Crosshair();
+		CrosshairPanel.Parent = Local.Hud;
+		CrosshairPanel.AddClass(CrosshairName);
 	}
 
 	public override void ActiveStart( Entity ent )
@@ -140,7 +152,7 @@ public partial class Weapon : BaseWeapon, IUse
 		}
 
 		ViewModelEntity?.SetAnimBool( "fire", true );
-		CrosshairPanel?.CreateEvent( "fire" );
+		CrosshairPanel?.CreateEvent( "fire", true );
 	}
 
 	/// <summary>
