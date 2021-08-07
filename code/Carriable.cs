@@ -28,4 +28,14 @@ public partial class Carriable : BaseCarriable, IUse
 	{
 		return Owner == null;
 	}
+
+	public override void CreateHudElements()
+	{
+		base.CreateHudElements();
+
+		if( Local.Hud == null ) return;
+
+		CrosshairPanel = new Crosshair();
+		CrosshairPanel.Parent = Local.Hud;
+	}
 }
