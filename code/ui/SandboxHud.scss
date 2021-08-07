@@ -19,12 +19,25 @@ Crosshair {
   .Buffer {
     position: relative;
     background-color: rgba(255, 255, 255, 0.5);
-    width: 3px;
+    width: 5px;
     height: 2px;
     left: -50%;
     top: -50%;
     margin: 4 4;
     border-radius: 4px;
+	transition: all 0.1s ease-in-out;
+  }
+
+  .Buffer1 {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 14px;
+    height: 2px;
+    left: -50%;
+    top: -50%;
+    margin: 4 4;
+    border-radius: 4px;
+	transition: all 0.1s ease-in-out;
   }
 
   .CrosshairRight {

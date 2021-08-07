@@ -8,6 +8,7 @@ public class Crosshair : Panel
 	int fireCounter;
 
 	Image image;
+	Panel buffer;
 
 	public Crosshair()
 	{
@@ -15,7 +16,7 @@ public class Crosshair : Panel
 		left.Parent = this;
 		left.AddClass("CrosshairLeft");
 
-		var buffer = Add.Panel("buffer");
+		buffer = Add.Panel("buffer");
 		buffer.Parent = this;
 		buffer.AddClass("Buffer");	
 
@@ -29,8 +30,9 @@ public class Crosshair : Panel
 	public override void Tick()
 	{
 		base.Tick();
-		
-		Style.Top = new Length { Value = fireCounter > 0 ? 32 : 50, Unit = LengthUnit.Percentage };
+		var active = fireCounter > 0;
+		buffer.SetClass("Buffer", !active);
+		buffer.SetClass("Buffer1", active);
 
 		if(fireCounter > 0)
 		{			
@@ -43,7 +45,7 @@ public class Crosshair : Panel
 	[PanelEvent]
 	public void FireEvent()
 	{
-		//fireCounter += 2;
+		fireCounter += 2;
 		
 	}
 }
