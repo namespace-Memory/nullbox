@@ -6,7 +6,6 @@ public class Crosshair : Panel
 {
 	Label Label;
 	int fireCounter;
-
 	Image image;
 	Panel buffer;
 
@@ -24,8 +23,8 @@ public class Crosshair : Panel
 		right.Parent = this;
 		right.AddClass("CrosshairRight");
 
-	}
 
+	}
 
 	public override void Tick()
 	{
@@ -45,7 +44,12 @@ public class Crosshair : Panel
 	[PanelEvent]
 	public void FireEvent()
 	{
-		fireCounter += 2;
+		Host.AssertClient();
+		if(fireCounter + 2 < 8)
+		{
+			fireCounter += 2;
+		}
+
 		
 	}
 }

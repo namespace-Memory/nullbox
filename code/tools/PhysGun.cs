@@ -3,7 +3,7 @@ using Sandbox.Joints;
 using System;
 using System.Linq;
 
-[Library( "physgun" )]
+[Library( "physgun", Title = "Physgun", Spawnable = true )]
 public partial class PhysGun : Carriable
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
@@ -88,6 +88,11 @@ public partial class PhysGun : Carriable
 					{
 						TryStartGrab( owner, eyePos, eyeRot, eyeDir );
 					}
+
+					using(Prediction.Off())
+					{
+						ClientEffects();
+					}
 				}
 				else if ( grabbing )
 				{
@@ -105,6 +110,13 @@ public partial class PhysGun : Carriable
 		{
 			Input.MouseWheel = 0;
 		}
+	}
+
+	[ClientRpc]
+	private void ClientEffects()
+	{
+		Host.AssertClient();
+		CrosshairPanel?.CreateEvent("fire", true);	
 	}
 
 	private static bool IsBodyGrabbed( PhysicsBody body )

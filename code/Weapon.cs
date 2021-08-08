@@ -15,7 +15,7 @@ public partial class Weapon : BaseWeapon, IUse
 	[Net, Predicted]
 	public TimeSince TimeSinceDeployed { get; set; }
 	
-	protected virtual string CrosshairName => "";
+	protected virtual string CrosshairName => "crosshair";
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -36,9 +36,13 @@ public partial class Weapon : BaseWeapon, IUse
 		base.CreateHudElements();
 
 		if( Local.Hud == null ) return;
-
+		CrosshairPanel = null;
 		CrosshairPanel = new Crosshair();
 		CrosshairPanel.Parent = Local.Hud;
+		foreach(var c in CrosshairPanel.Class)
+		{
+			CrosshairPanel.RemoveClass(c);
+		}
 		CrosshairPanel.AddClass(CrosshairName);
 	}
 

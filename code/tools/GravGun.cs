@@ -3,7 +3,7 @@ using Sandbox.Joints;
 using System;
 using System.Linq;
 
-[Library( "gravgun" )]
+[Library( "gravgun", Title = "Grav Gun", Spawnable = true )]
 public partial class GravGun : Carriable
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
@@ -73,7 +73,10 @@ public partial class GravGun : Carriable
 						HeldBody.ApplyImpulse( eyeDir * (HeldBody.Mass * ThrowForce) );
 						HeldBody.ApplyAngularImpulse( Vector3.Random * (HeldBody.Mass * ThrowForce) );
 					}
-
+					
+					(owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+					ClientEffects();
+					
 					GrabEnd();
 				}
 				else if ( Input.Pressed( InputButton.Attack2 ) )
@@ -118,6 +121,11 @@ public partial class GravGun : Carriable
 				{
 					var pushScale = 1.0f - Math.Clamp( tr.Distance / MaxPushDistance, 0.0f, 1.0f );
 					body.ApplyImpulseAt( tr.EndPos, eyeDir * (body.Mass * (PushForce * pushScale)) );
+					(owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+					using(Prediction.Off())
+					{
+						ClientEffects();
+					}
 				}
 			}
 			else if ( Input.Down( InputButton.Attack2 ) )
@@ -141,6 +149,23 @@ public partial class GravGun : Carriable
 				}
 			}
 		}
+	}
+
+	[ClientRpc]
+	public void ClientEffects()
+	{
+		Host.AssertClient();
+		if ( IsLocalPawn )
+		{
+			_ = new Sandbox.ScreenShake.Perlin();
+		}
+		
+		(Owner as AnimEntity).SetAnimBool( "b_attack", true );
+		for(int i = 0; i <= 2; i++)
+		{
+			CrosshairPanel?.CreateEvent("fire", true);
+		}
+
 	}
 
 	private void Activate()
@@ -277,4 +302,5 @@ public partial class GravGun : Carriable
 	{
 		return Owner == null || HeldBody.IsValid();
 	}
+
 }

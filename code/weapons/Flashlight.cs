@@ -54,6 +54,7 @@ partial class Flashlight : Weapon
 			OuterConeAngle = 40,
 			FogStength = 1.0f,
 			Owner = Owner,
+			LightCookie = Texture.Load("textures/flashlight.png")
 		};
 
 		light.UseFog();

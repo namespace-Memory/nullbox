@@ -30,7 +30,10 @@
 				Rotation = Owner.EyeRot
 			};
 
+			
 			ent.SetModel( "models/citizen_props/crate01.vmdl" );
+			ent.SetupPhysicsFromModel(PhysicsMotionType.Dynamic, false);
+			ent.PhysicsGroup?.ApplyAngularImpulse(Vector3.Random * 4000, true);
 			ent.Velocity = Owner.EyeRot.Forward * 1000;
 		}
 	}

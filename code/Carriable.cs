@@ -37,5 +37,6 @@ public partial class Carriable : BaseCarriable, IUse
 
 		CrosshairPanel = new Crosshair();
 		CrosshairPanel.Parent = Local.Hud;
+
 	}
 }
