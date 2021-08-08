@@ -37,5 +37,4 @@
 			ent.Velocity = Owner.EyeRot.Forward * 1000;
 		}
 	}
-
 }
