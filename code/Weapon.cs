@@ -14,7 +14,7 @@ public partial class Weapon : BaseWeapon, IUse
 
 	[Net, Predicted]
 	public TimeSince TimeSinceDeployed { get; set; }
-	
+
 	protected virtual string CrosshairName => "crosshair";
 	public override void Spawn()
 	{
@@ -35,15 +35,15 @@ public partial class Weapon : BaseWeapon, IUse
 	{
 		base.CreateHudElements();
 
-		if( Local.Hud == null ) return;
+		if ( Local.Hud == null ) return;
 		CrosshairPanel = null;
 		CrosshairPanel = new Crosshair();
 		CrosshairPanel.Parent = Local.Hud;
-		foreach(var c in CrosshairPanel.Class)
+		foreach ( var c in CrosshairPanel.Class )
 		{
-			CrosshairPanel.RemoveClass(c);
+			CrosshairPanel.RemoveClass( c );
 		}
-		CrosshairPanel.AddClass(CrosshairName);
+		CrosshairPanel.AddClass( CrosshairName );
 	}
 
 	public override void ActiveStart( Entity ent )
@@ -199,6 +199,7 @@ public partial class Weapon : BaseWeapon, IUse
 	/// </summary>
 	public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
 	{
+		Rand.SetSeed( Time.Tick );
 		ShootBullet( Owner.EyePos, Owner.EyeRot.Forward, spread, force, damage, bulletSize );
 	}
 
@@ -210,6 +211,7 @@ public partial class Weapon : BaseWeapon, IUse
 		var pos = Owner.EyePos;
 		var dir = Owner.EyeRot.Forward;
 
+		Rand.SetSeed( Time.Tick );
 		for ( int i = 0; i < numBullets; i++ )
 		{
 			ShootBullet( pos, dir, spread, force / numBullets, damage, bulletSize );

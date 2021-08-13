@@ -25,7 +25,7 @@ Crosshair {
     top: -50%;
     margin: 4 4;
     border-radius: 4px;
-	transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
 
   .Buffer1 {
@@ -37,7 +37,7 @@ Crosshair {
     top: -50%;
     margin: 4 4;
     border-radius: 4px;
-	transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
 
   .CrosshairRight {
@@ -120,11 +120,12 @@ CurrentTool {
 
 rootpanel {
   background-color: rgba(#333, 0);
-  transition: background-color 0.2s ease-in;
+  transition: all 0.2s ease-in;
 
   &.spawnmenuopen {
-    transition: background-color 0.3s ease-out;
+    transition: all 0.3s ease-out;
     background-color: rgba(#333, 0.9);
+    backdrop-filter: blur(18px);
   }
 
   &.devcamera {
@@ -144,11 +145,13 @@ InventoryIcon {
   width: 80px;
   height: 80px;
   background-color: rgba(#222, 0.3);
+  backdrop-filter: blur(8px);
   margin: 0px 2px;
   position: relative;
   transition: all 0.2s ease-in-out;
   margin-top: 10px;
   font-family: poppins;
+  border-radius: 16px;
 
   .item-name {
     padding: 5px;
@@ -166,7 +169,7 @@ InventoryIcon {
 
   .slot-number {
     font-size: 25px;
-    color: black;
+    color: rgba(182, 173, 173, 0.925);
     font-weight: 900;
     opacity: 0.3;
     position: absolute;

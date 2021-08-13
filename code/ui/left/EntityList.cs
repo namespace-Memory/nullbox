@@ -15,7 +15,7 @@ public partial class EntityList : Panel
 		AddChild( out Canvas, "canvas" );
 
 		Canvas.Layout.AutoColumns = true;
-		Canvas.Layout.ItemSize = new Vector2( 100, 100 );
+		Canvas.Layout.ItemSize = new Vector2( 120, 120 );
 		Canvas.OnCreateCell = ( cell, data ) =>
 		{
 			var entry = (LibraryAttribute)data;
