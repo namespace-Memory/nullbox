@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "sandbox_fork", Title = "Sandbox Fork" )]
+[Library( "nullbox", Title = "Nullbox" )]
 partial class SandboxGame : Game
 {
 	public SandboxGame()
