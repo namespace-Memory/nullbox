@@ -36,6 +36,7 @@ partial class SMG : Weapon
 	}
 
 
+
 	public override void AttackSecondary()
 	{
 		// Grenade lob
@@ -55,7 +56,7 @@ partial class SMG : Weapon
 		}
 
 		ViewModelEntity?.SetAnimBool( "fire", true );
-		CrosshairPanel?.CreateEvent( "fire" );
+		CrosshairPanel?.CreateEvent( "fire", true );
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )

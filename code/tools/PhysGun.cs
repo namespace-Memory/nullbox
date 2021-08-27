@@ -89,7 +89,7 @@ public partial class PhysGun : Carriable
 						TryStartGrab( owner, eyePos, eyeRot, eyeDir );
 					}
 
-					using(Prediction.Off())
+					using ( Prediction.Off() )
 					{
 						ClientEffects();
 					}
@@ -110,13 +110,15 @@ public partial class PhysGun : Carriable
 		{
 			Input.MouseWheel = 0;
 		}
+
+		base.Simulate( client );
 	}
 
 	[ClientRpc]
 	private void ClientEffects()
 	{
 		Host.AssertClient();
-		CrosshairPanel?.CreateEvent("fire", true);	
+		CrosshairPanel?.CreateEvent( "fire", true );
 	}
 
 	private static bool IsBodyGrabbed( PhysicsBody body )

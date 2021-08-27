@@ -1,53 +1,23 @@
 Crosshair {
+  background-color: #ffffff85;
   position: absolute;
+  border-radius: 1px;
+  width: 4px;
+  margin-left: -2px;
+  height: 3px;
   left: 50%;
   top: 50%;
-  align-content: center;
-  flex-direction: row;
-  align-items: center;
+  border: 2px auto black;
+  transition: all 200ms ease-in;
 
-  .CrosshairLeft {
-    background-color: rgba(255, 255, 255, 0.63);
-    position: relative;
-    left: -50%;
-    top: -50%;
-    width: 2px;
-    height: 7px;
-    margin: 0;
-  }
-
-  .Buffer {
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.5);
-    width: 5px;
-    height: 2px;
-    left: -50%;
-    top: -50%;
-    margin: 4 4;
-    border-radius: 4px;
-    transition: all 0.1s ease-in-out;
-  }
-
-  .Buffer1 {
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.5);
-    width: 14px;
-    height: 2px;
-    left: -14px;
-    top: -50%;
-    margin: 4 4;
-    border-radius: 4px;
-    transition: all 0.1s ease-in-out;
-  }
-
-  .CrosshairRight {
-    background-color: rgba(255, 255, 255, 0.63);
-    position: relative;
-    width: 2px;
-    height: 7px;
-    left: -50%;
-    top: -50%;
-    margin: 0;
+  &.fire {
+    background-color: #f1c1c17a;
+    border-radius: 3px;
+    width: 16px;
+    height: 4px;
+    margin-left: -8px;
+    margin-top: -2px;
+    transition: all 50ms ease-in;
   }
 }
 

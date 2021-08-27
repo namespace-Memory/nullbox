@@ -11,45 +11,27 @@ public class Crosshair : Panel
 
 	public Crosshair()
 	{
-		var left = Add.Panel("left");
-		left.Parent = this;
-		left.AddClass("CrosshairLeft");
-
-		buffer = Add.Panel("buffer");
-		buffer.Parent = this;
-		buffer.AddClass("Buffer");	
-
-		var right = Add.Panel("right");
-		right.Parent = this;
-		right.AddClass("CrosshairRight");
-
+		AddClass( "Crosshair" );
 
 	}
 
 	public override void Tick()
 	{
 		base.Tick();
-		var active = fireCounter > 0;
-		buffer.SetClass("Buffer", !active);
-		buffer.SetClass("Buffer1", active);
 
-		if(fireCounter > 0)
-		{			
+		SetClass( "fire", fireCounter > 0 );
+
+		if ( fireCounter > 0 )
+		{
 			fireCounter--;
 		}
-
-		//Style.Dirty();
 	}
 
-	[PanelEvent]
+	[PanelEvent( "fire" )]
 	public void FireEvent()
 	{
 		Host.AssertClient();
-		if(fireCounter + 2 < 8)
-		{
-			fireCounter += 2;
-		}
 
-		
+		fireCounter = 16;
 	}
 }

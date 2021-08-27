@@ -54,7 +54,7 @@ partial class Flashlight : Weapon
 			OuterConeAngle = 40,
 			FogStength = 1.0f,
 			Owner = Owner,
-			LightCookie = Texture.Load( "materials/effects/lightcookie.vtex" )
+			LightCookie = Texture.Load( "textures/rainbow.vtex" )
 		};
 
 		return light;
@@ -83,10 +83,14 @@ partial class Flashlight : Weapon
 			if ( viewLight.IsValid() )
 			{
 				viewLight.Enabled = LightEnabled;
+
 			}
 
 			timeSinceLightToggled = 0;
 		}
+
+		if ( IsServer ) return;
+		viewLight.LocalRotation = Rotation.From( 0, 0, -MathX.RadianToDegree( Time.Now * 0.4f ) );
 	}
 
 	public override bool CanReload()
@@ -104,8 +108,9 @@ partial class Flashlight : Weapon
 		{
 			OnMeleeMiss();
 		}
-
+		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 		PlaySound( "rust_flashlight.attack" );
+
 	}
 
 	private bool MeleeAttack()

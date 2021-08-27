@@ -33,7 +33,7 @@ public partial class Carriable : BaseCarriable, IUse
 	{
 		base.CreateHudElements();
 
-		if( Local.Hud == null ) return;
+		if ( Local.Hud == null ) return;
 
 		CrosshairPanel = new Crosshair();
 		CrosshairPanel.Parent = Local.Hud;

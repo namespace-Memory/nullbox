@@ -36,14 +36,16 @@ public partial class Weapon : BaseWeapon, IUse
 		base.CreateHudElements();
 
 		if ( Local.Hud == null ) return;
-		CrosshairPanel = null;
+
 		CrosshairPanel = new Crosshair();
 		CrosshairPanel.Parent = Local.Hud;
-		foreach ( var c in CrosshairPanel.Class )
-		{
-			CrosshairPanel.RemoveClass( c );
-		}
-		CrosshairPanel.AddClass( CrosshairName );
+
+	}
+
+	public override void DestroyHudElements()
+	{
+		base.DestroyHudElements();
+		CrosshairPanel?.Delete();
 	}
 
 	public override void ActiveStart( Entity ent )
@@ -79,6 +81,11 @@ public partial class Weapon : BaseWeapon, IUse
 		if ( IsReloading && TimeSinceReload > ReloadTime )
 		{
 			OnReloadFinish();
+		}
+
+		if ( Input.Pressed( InputButton.Use ) )
+		{
+			DestroyHudElements();
 		}
 	}
 
@@ -156,7 +163,12 @@ public partial class Weapon : BaseWeapon, IUse
 		}
 
 		ViewModelEntity?.SetAnimBool( "fire", true );
+
+
 		CrosshairPanel?.CreateEvent( "fire", true );
+
+
+
 	}
 
 	/// <summary>
