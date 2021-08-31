@@ -18,7 +18,7 @@ public class Crosshair : Panel
 	public override void Tick()
 	{
 		base.Tick();
-
+		this.PositionAtCrosshair();
 		SetClass( "fire", fireCounter > 0 );
 
 		if ( fireCounter > 0 )

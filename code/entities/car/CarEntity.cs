@@ -27,6 +27,7 @@ public partial class CarEntity : Prop, IUse
 	private float airTilt;
 	private float grip;
 	private TimeSince timeSinceDriverLeft;
+	private TimeSince timeSinceJump;
 
 	[Net] private float WheelSpeed { get; set; }
 	[Net] private float TurnDirection { get; set; }
@@ -43,6 +44,7 @@ public partial class CarEntity : Prop, IUse
 		public float breaking;
 		public float tilt;
 		public float roll;
+		public bool jump;
 
 		public void Reset()
 		{
@@ -51,6 +53,7 @@ public partial class CarEntity : Prop, IUse
 			breaking = 0;
 			tilt = 0;
 			roll = 0;
+			jump = false;
 		}
 	}
 
@@ -215,6 +218,7 @@ public partial class CarEntity : Prop, IUse
 			currentInput.breaking = (Input.Down( InputButton.Jump ) ? 1 : 0);
 			currentInput.tilt = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
 			currentInput.roll = (Input.Down( InputButton.Left ) ? 1 : 0) + (Input.Down( InputButton.Right ) ? -1 : 0);
+			currentInput.jump = (Input.Down( InputButton.Duck ));
 		}
 	}
 
@@ -322,6 +326,13 @@ public partial class CarEntity : Prop, IUse
 			var forwardGrip = 0.1f;
 			forwardGrip = forwardGrip.LerpTo( 0.9f, currentInput.breaking );
 			body.Velocity = VelocityDamping( Velocity, rotation, new Vector3( forwardGrip, grip, 0 ), dt );
+
+			if ( currentInput.jump && timeSinceJump > 0.8f )
+			{
+				timeSinceJump = 0;
+				body.Velocity += Vector3.Up * 400f;
+
+			}
 		}
 		else
 		{

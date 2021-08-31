@@ -11,7 +11,8 @@ public partial class Coin : Prop, IUse
 		base.Spawn();
 		SetModel( "models/citizen_props/coin01.vmdl" );
 		SetupPhysicsFromModel( PhysicsMotionType.Static, false );
-		PostSpawn();
+		Rotation = Rotation.From( 0, 0, 90 );
+		// PostSpawn();
 
 	}
 

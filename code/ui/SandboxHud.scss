@@ -8,7 +8,7 @@ Crosshair {
   left: 50%;
   top: 50%;
   border: 2px auto black;
-  transition: all 200ms ease-in;
+  transition: width 200ms ease-in;
 
   &.fire {
     background-color: #f1c1c17a;
