@@ -37,6 +37,8 @@ public partial class CarEntity : Prop, IUse
 	[Net] public float MovementSpeed { get; private set; }
 	[Net] public bool Grounded { get; private set; }
 
+	[Net] public float JumpBuildupPower { get; private set; }
+
 	private struct InputState
 	{
 		public float throttle;
@@ -45,6 +47,7 @@ public partial class CarEntity : Prop, IUse
 		public float tilt;
 		public float roll;
 		public bool jump;
+		public bool releasedJump;
 
 		public void Reset()
 		{
@@ -54,6 +57,7 @@ public partial class CarEntity : Prop, IUse
 			tilt = 0;
 			roll = 0;
 			jump = false;
+			releasedJump = false;
 		}
 	}
 
@@ -219,6 +223,7 @@ public partial class CarEntity : Prop, IUse
 			currentInput.tilt = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
 			currentInput.roll = (Input.Down( InputButton.Left ) ? 1 : 0) + (Input.Down( InputButton.Right ) ? -1 : 0);
 			currentInput.jump = (Input.Down( InputButton.Duck ));
+			currentInput.releasedJump = (Input.Released( InputButton.Duck ));
 		}
 	}
 
@@ -327,11 +332,17 @@ public partial class CarEntity : Prop, IUse
 			forwardGrip = forwardGrip.LerpTo( 0.9f, currentInput.breaking );
 			body.Velocity = VelocityDamping( Velocity, rotation, new Vector3( forwardGrip, grip, 0 ), dt );
 
-			if ( currentInput.jump && timeSinceJump > 0.8f )
+			if ( currentInput.jump )
+			{
+				JumpBuildupPower = Math.Clamp( JumpBuildupPower + Time.Delta * 410f, 30f, 800f );
+				body.Velocity += Vector3.Down * (JumpBuildupPower * 0.05f);
+			}
+
+			if ( currentInput.releasedJump && timeSinceJump > 0.8f )
 			{
 				timeSinceJump = 0;
-				body.Velocity += Vector3.Up * 400f;
-
+				body.Velocity += Vector3.Up * JumpBuildupPower.CeilToInt();
+				JumpBuildupPower = 0;
 			}
 		}
 		else

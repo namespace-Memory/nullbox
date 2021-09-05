@@ -48,7 +48,7 @@ partial class SandboxPlayer : Player
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		Dress();
+		Dress( null );
 
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );

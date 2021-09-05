@@ -2,58 +2,117 @@
 
 partial class SandboxPlayer
 {
-	ModelEntity pants;
-	ModelEntity jacket;
-	ModelEntity shoes;
-	ModelEntity hat;
 
-	bool dressed = false;
-
-	public void Dress()
+	public class PlayerOutfit
 	{
-		if ( dressed ) return;
-		dressed = true;
+		/// <summary>
+		/// Indexed from hat to shoes.
+		/// </summary>
+		public ModelEntity[] Clothes = new ModelEntity[4];
+	}
 
-		if ( true )
+	public PlayerOutfit Outfit { get; private set; }
+
+	private bool dressed = false;
+
+
+	public static readonly string[] Trousers =
+	{
+		"models/citizen_clothes/trousers/trousers.jeans.vmdl",
+		"models/citizen_clothes/trousers/trousers.lab.vmdl",
+		"models/citizen_clothes/trousers/trousers.police.vmdl",
+		"models/citizen_clothes/trousers/trousers.smart.vmdl",
+		"models/citizen_clothes/trousers/trousers.smarttan.vmdl",
+		"models/citizen_clothes/trousers/trousers_tracksuitblue.vmdl",
+		"models/citizen_clothes/trousers/trousers_tracksuit.vmdl",
+		"models/citizen_clothes/shoes/shorts.cargo.vmdl",
+	};
+
+	public static readonly string[] Jackets =
+	{
+		"models/citizen_clothes/jacket/labcoat.vmdl",
+		"models/citizen_clothes/jacket/jacket.red.vmdl",
+		"models/citizen_clothes/jacket/jacket.tuxedo.vmdl",
+		"models/citizen_clothes/jacket/jacket_heavy.vmdl",
+	};
+
+	public static readonly string[] Hats =
+	{
+		"models/citizen_clothes/hat/hat_hardhat.vmdl",
+		"models/citizen_clothes/hat/hat_woolly.vmdl",
+		"models/citizen_clothes/hat/hat_securityhelmet.vmdl",
+		"models/citizen_clothes/hair/hair_malestyle02.vmdl",
+		"models/citizen_clothes/hair/hair_femalebun.black.vmdl",
+		"models/citizen_clothes/hat/hat_beret.red.vmdl",
+		"models/citizen_clothes/hat/hat.tophat.vmdl",
+		"models/citizen_clothes/hat/hat_beret.black.vmdl",
+		"models/citizen_clothes/hat/hat_cap.vmdl",
+		"models/citizen_clothes/hat/hat_leathercap.vmdl",
+		"models/citizen_clothes/hat/hat_leathercapnobadge.vmdl",
+		"models/citizen_clothes/hat/hat_securityhelmetnostrap.vmdl",
+		"models/citizen_clothes/hat/hat_service.vmdl",
+		"models/citizen_clothes/hat/hat_uniform.police.vmdl",
+		"models/citizen_clothes/hat/hat_woollybobble.vmdl",
+	};
+
+	public static readonly string[] Shoes =
+	{
+		"models/citizen_clothes/shoes/trainers.vmdl",
+		"models/citizen_clothes/shoes/shoes.workboots.vmdl"
+	};
+
+	public void Strip()
+	{
+		if ( dressed )
 		{
-			var model = Rand.FromArray( new[]
-			{
-				"models/citizen_clothes/trousers/trousers.jeans.vmdl",
-				"models/citizen_clothes/trousers/trousers.lab.vmdl",
-				"models/citizen_clothes/trousers/trousers.police.vmdl",
-				"models/citizen_clothes/trousers/trousers.smart.vmdl",
-				"models/citizen_clothes/trousers/trousers.smarttan.vmdl",
-				"models/citizen_clothes/trousers/trousers_tracksuitblue.vmdl",
-				"models/citizen_clothes/trousers/trousers_tracksuit.vmdl",
-				"models/citizen_clothes/shoes/shorts.cargo.vmdl",
-			} );
-
-			pants = new ModelEntity();
-			pants.SetModel( model );
-			pants.SetParent( this, true );
-			pants.EnableShadowInFirstPerson = true;
-			pants.EnableHideInFirstPerson = true;
-
-			SetBodyGroup( "Legs", 1 );
+			dressed = false;
 		}
 
-		if ( true )
+		if ( Outfit == null ) return;
+		for ( int i = 0; i < Outfit.Clothes.Length; i++ )
 		{
-			var model = Rand.FromArray( new[]
+			Outfit.Clothes[i].Delete();
+		}
+		SetBodyGroup( "Chest", 1 );
+		SetBodyGroup( "Legs", 1 );
+		SetBodyGroup( "Feet", 1 );
+
+	}
+	public void Dress( PlayerOutfit newOutfit )
+	{
+		if ( dressed || IsClient ) return;
+		dressed = true;
+
+		if ( newOutfit != null )
+		{
+			Outfit = newOutfit;
+			for ( int i = 0; i < newOutfit.Clothes.Length; i++ )
 			{
-				"models/citizen_clothes/jacket/labcoat.vmdl",
-				"models/citizen_clothes/jacket/jacket.red.vmdl",
-				"models/citizen_clothes/jacket/jacket.tuxedo.vmdl",
-				"models/citizen_clothes/jacket/jacket_heavy.vmdl",
-			} );
+				Outfit.Clothes[i] = newOutfit.Clothes[i];
+			}
+			SetBodyGroup( "Chest", 1 );
+			SetBodyGroup( "Legs", 1 );
+			SetBodyGroup( "Feet", 1 );
 
-			jacket = new ModelEntity();
-			jacket.SetModel( model );
-			jacket.SetParent( this, true );
-			jacket.EnableShadowInFirstPerson = true;
-			jacket.EnableHideInFirstPerson = true;
+		}
+		else
+		{
+			Outfit = new PlayerOutfit();
 
-			var propInfo = jacket.GetModel().GetPropData();
+			//Hat
+			Outfit.Clothes[0] = new ModelEntity();
+			Outfit.Clothes[0].SetModel( Rand.FromArray<string>( Hats, null ) );
+			Outfit.Clothes[0].SetParent( this, true );
+			Outfit.Clothes[0].EnableShadowInFirstPerson = true;
+			Outfit.Clothes[0].EnableHideInFirstPerson = true;
+
+			//Jacket
+			Outfit.Clothes[1] = new ModelEntity();
+			Outfit.Clothes[1].SetModel( Rand.FromArray<string>( Jackets, null ) );
+			Outfit.Clothes[1].SetParent( this, true );
+			Outfit.Clothes[1].EnableShadowInFirstPerson = true;
+			Outfit.Clothes[1].EnableHideInFirstPerson = true;
+			var propInfo = Outfit.Clothes[1].GetModel().GetPropData();
 			if ( propInfo.ParentBodyGroupName != null )
 			{
 				SetBodyGroup( propInfo.ParentBodyGroupName, propInfo.ParentBodyGroupValue );
@@ -62,51 +121,24 @@ partial class SandboxPlayer
 			{
 				SetBodyGroup( "Chest", 0 );
 			}
-		}
 
-		if ( true )
-		{
-			var model = Rand.FromArray( new[]
-			{
-				"models/citizen_clothes/shoes/trainers.vmdl",
-				"models/citizen_clothes/shoes/shoes.workboots.vmdl"
-			} );
+			//Pants
+			Outfit.Clothes[2] = new ModelEntity();
+			Outfit.Clothes[2].SetModel( Rand.FromArray<string>( Trousers, null ) );
+			Outfit.Clothes[2].SetParent( this, true );
+			Outfit.Clothes[2].EnableShadowInFirstPerson = true;
+			Outfit.Clothes[2].EnableHideInFirstPerson = true;
+			SetBodyGroup( "Legs", 1 );
 
-			shoes = new ModelEntity();
-			shoes.SetModel( model );
-			shoes.SetParent( this, true );
-			shoes.EnableShadowInFirstPerson = true;
-			shoes.EnableHideInFirstPerson = true;
-
+			Outfit.Clothes[3] = new ModelEntity();
+			Outfit.Clothes[3].SetModel( Rand.FromArray<string>( Shoes, null ) );
+			Outfit.Clothes[3].SetParent( this, true );
+			Outfit.Clothes[3].EnableShadowInFirstPerson = true;
+			Outfit.Clothes[3].EnableHideInFirstPerson = true;
 			SetBodyGroup( "Feet", 1 );
 		}
 
-		if ( true )
-		{
-			var model = Rand.FromArray( new[]
-			{
-				"models/citizen_clothes/hat/hat_hardhat.vmdl",
-				"models/citizen_clothes/hat/hat_woolly.vmdl",
-				"models/citizen_clothes/hat/hat_securityhelmet.vmdl",
-				"models/citizen_clothes/hair/hair_malestyle02.vmdl",
-				"models/citizen_clothes/hair/hair_femalebun.black.vmdl",
-				"models/citizen_clothes/hat/hat_beret.red.vmdl",
-				"models/citizen_clothes/hat/hat.tophat.vmdl",
-				"models/citizen_clothes/hat/hat_beret.black.vmdl",
-				"models/citizen_clothes/hat/hat_cap.vmdl",
-				"models/citizen_clothes/hat/hat_leathercap.vmdl",
-				"models/citizen_clothes/hat/hat_leathercapnobadge.vmdl",
-				"models/citizen_clothes/hat/hat_securityhelmetnostrap.vmdl",
-				"models/citizen_clothes/hat/hat_service.vmdl",
-				"models/citizen_clothes/hat/hat_uniform.police.vmdl",
-				"models/citizen_clothes/hat/hat_woollybobble.vmdl",
-			} );
 
-			hat = new ModelEntity();
-			hat.SetModel( model );
-			hat.SetParent( this, true );
-			hat.EnableShadowInFirstPerson = true;
-			hat.EnableHideInFirstPerson = true;
-		}
+
 	}
 }
