@@ -40,7 +40,7 @@ partial class SandboxPlayer : Player
 
 	public override void Spawn()
 	{
-		MainCamera = new CustomThirdPersonCamera();
+		MainCamera = new FirstPersonCamera();
 		LastCamera = MainCamera;
 
 		base.Spawn();
